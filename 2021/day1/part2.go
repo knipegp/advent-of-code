@@ -18,6 +18,6 @@ func (in depthVector) takeWindowSum(windowLength int) depthVector {
 
 // SolvePart2 solves the problem and returns the number of depth increases for
 // the sonar input with windowed sums.
-func SolvePart2() int {
-	return getDepthsFromInput("day1/input.txt").takeWindowSum(3).takeDerivative().countGreaterThan(0)
+func SolvePart2(input string) int {
+	return parseInput(input).takeWindowSum(3).takeDerivative().countGreaterThan(0)
 }

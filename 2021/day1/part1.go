@@ -1,32 +1,20 @@
 package day1
 
 import (
-	"bufio"
-	"os"
 	"strconv"
+	"strings"
 )
 
 type depthVector []int
 
-func getDepthsFromInput(filePath string) depthVector {
-	inputFile, err := os.Open(filePath)
-	if err != nil {
-		panic(err)
-	}
-	defer inputFile.Close()
-	inputScanner := bufio.NewScanner(inputFile)
-
+func parseInput(input string) depthVector {
 	depths := []int{}
-	for inputScanner.Scan() {
-		rawDepth := inputScanner.Text()
+	for _, rawDepth := range strings.Split(input, "\n") {
 		depth, err := strconv.Atoi(rawDepth)
 		if err != nil {
 			panic(err)
 		}
 		depths = append(depths, depth)
-	}
-	if err := inputScanner.Err(); err != nil {
-		panic(err)
 	}
 	return depths
 }
@@ -50,6 +38,6 @@ func (in depthVector) countGreaterThan(val int) int {
 }
 
 // SolvePart1 solves the problem and returns the number of depth increases in the input file.
-func SolvePart1() int {
-	return getDepthsFromInput("input.txt").takeDerivative().countGreaterThan(0)
+func SolvePart1(input string) int {
+	return parseInput(input).takeDerivative().countGreaterThan(0)
 }

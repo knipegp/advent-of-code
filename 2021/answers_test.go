@@ -9,7 +9,7 @@ import (
 	"github.com/knipegp/advent-of-code/2021/day3"
 )
 
-type solver func(string) int
+type solver func(string) (int, error)
 
 func TestAnswers(t *testing.T) {
 	expectedAnswers := []struct {
@@ -22,10 +22,18 @@ func TestAnswers(t *testing.T) {
 		{day2.SolvePart1, data.Day2, 1694130},
 		{day2.SolvePart2, data.Day2, 1698850445},
 		{day3.SolvePart1, data.Day3, 3374136},
+		{day3.SolvePart2, data.Day3, 4432698},
 	}
 	for _, expected := range expectedAnswers {
-		if calcSoln := expected.getSolution(expected.input); calcSoln != expected.answer {
-			t.Errorf("Solver %v returned %d, expected %d", expected.getSolution, calcSoln, expected.answer)
+		if calcSoln, err := expected.getSolution(expected.input); calcSoln != expected.answer ||
+			err != nil {
+			t.Errorf(
+				"Solver %v returned %d, expected %d; Error %v",
+				expected.getSolution,
+				calcSoln,
+				expected.answer,
+				err,
+			)
 		}
 	}
 }

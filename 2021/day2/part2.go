@@ -23,11 +23,16 @@ func (l locationWithAim) displace(d displacement) locationWithAim {
 }
 
 // SolvePart2 solves part 2 and returns the product of coordinates.
-func SolvePart2(input string) int {
-	movements := parseMovement(input)
-	currentLocation := locationWithAim{location{0, 0}, 0}
-	for _, movement := range movements {
-		currentLocation = currentLocation.displace(movement)
+func SolvePart2(input string) (prod int, err error) {
+
+	var movements []displacement
+	movements, err = parseMovement(input)
+	if err == nil {
+		currentLocation := locationWithAim{location{0, 0}, 0}
+		for _, movement := range movements {
+			currentLocation = currentLocation.displace(movement)
+		}
+		prod = currentLocation.horizontal * currentLocation.vertical
 	}
-	return currentLocation.horizontal * currentLocation.vertical
+	return prod, err
 }

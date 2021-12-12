@@ -7,16 +7,16 @@ import (
 
 type depthVector []int
 
-func parseInput(input string) depthVector {
-	depths := []int{}
+func parseInput(input string) (depths depthVector, err error) {
+	depths = []int{}
 	for _, rawDepth := range strings.Split(input, "\n") {
 		depth, err := strconv.Atoi(rawDepth)
 		if err != nil {
-			panic(err)
+			break
 		}
 		depths = append(depths, depth)
 	}
-	return depths
+	return depths, err
 }
 
 func (in depthVector) takeDerivative() depthVector {
@@ -38,6 +38,10 @@ func (in depthVector) countGreaterThan(val int) int {
 }
 
 // SolvePart1 solves the problem and returns the number of depth increases in the input file.
-func SolvePart1(input string) int {
-	return parseInput(input).takeDerivative().countGreaterThan(0)
+func SolvePart1(input string) (incs int, err error) {
+	parsed, err := parseInput(input)
+	if err == nil {
+		incs = parsed.takeDerivative().countGreaterThan(0)
+	}
+	return incs, err
 }

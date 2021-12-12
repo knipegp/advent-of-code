@@ -160,9 +160,11 @@ func findScrubberRating(
 
 // SolvePart2 calculates the life support rating for the submarine.
 func SolvePart2(input string) (lifeSupportRating int, err error) {
-	fullReport := parseInput(input)
+	fullReport, err := parseInput(input)
 	var oxyRating, scrubberRating *big.Int
-	oxyRating, err = findOxygenValue(fullReport)
+	if err == nil {
+		oxyRating, err = findOxygenValue(fullReport)
+	}
 	if err == nil {
 		scrubberRating, err = findScrubberRating(fullReport)
 	}

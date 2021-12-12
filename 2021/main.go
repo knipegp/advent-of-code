@@ -54,7 +54,7 @@ func main() {
 		part2 = day2.SolvePart2(getInputFromFile(*parsedArgs.inputPath))
 	case 3:
 		part1 = day3.SolvePart1(getInputFromFile(*parsedArgs.inputPath))
-		// part2 = day2.SolvePart2(getInputFromFile(*parsedArgs.inputPath))
+		part2, _ = day3.SolvePart2(getInputFromFile(*parsedArgs.inputPath))
 	default:
 		panic(fmt.Errorf("Passed invalid day %d", parsedArgs.day))
 	}

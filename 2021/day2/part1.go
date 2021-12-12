@@ -25,7 +25,8 @@ type location struct {
 	vertical   int
 }
 
-func (l location) displace(d displacement) location {
+func (l location) displace(d displacement) (location, error) {
+	var err error
 	switch d.direction {
 	case forward:
 		l.horizontal += d.magnitude
@@ -34,35 +35,47 @@ func (l location) displace(d displacement) location {
 	case down:
 		l.vertical += d.magnitude
 	default:
-		panic(fmt.Errorf("Received unknown direction %s", d.direction))
+		err = fmt.Errorf("Received unknown direction %s", d.direction)
 	}
-	return l
+	return l, err
 }
 
-func fromString(rawDisplacement string) displacement {
+func fromString(rawDisplacement string) (displacement, error) {
 	pattern := regexp.MustCompile(`(\w+) (\d)`)
 	groups := pattern.FindStringSubmatch(rawDisplacement)
 	magnitude, err := strconv.Atoi(groups[2])
-	if err != nil {
-		panic(err)
-	}
-	return displacement{direction: movementDirection(groups[1]), magnitude: magnitude}
+	return displacement{
+		direction: movementDirection(groups[1]),
+		magnitude: magnitude,
+	}, err
 }
 
-func parseMovement(rawMovements string) []displacement {
+func parseMovement(rawMovements string) ([]displacement, error) {
 	displacements := []displacement{}
+	var err error
 	for _, rawDisplacement := range strings.Split(rawMovements, "\n") {
-		displacements = append(displacements, fromString(rawDisplacement))
+		var disp displacement
+		disp, err = fromString(rawDisplacement)
+		if err != nil {
+			break
+		}
+		displacements = append(displacements, disp)
 	}
-	return displacements
+	return displacements, err
 }
 
 // SolvePart1 solves part 1 and returns the product of coordinates.
-func SolvePart1(input string) int {
-	movements := parseMovement(input)
-	currentLocation := location{0, 0}
-	for _, movement := range movements {
-		currentLocation = currentLocation.displace(movement)
+func SolvePart1(input string) (int, error) {
+	movements, err := parseMovement(input)
+	var currentLocation location
+	if err == nil {
+		currentLocation = location{0, 0}
+		for _, movement := range movements {
+			currentLocation, err = currentLocation.displace(movement)
+			if err != nil {
+				break
+			}
+		}
 	}
-	return currentLocation.horizontal * currentLocation.vertical
+	return currentLocation.horizontal * currentLocation.vertical, err
 }

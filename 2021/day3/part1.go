@@ -13,7 +13,7 @@ type diagnosticReport struct {
 	reportBitLen int
 }
 
-func parseInput(input string) diagnosticReport {
+func parseInput(input string) (parsed diagnosticReport, err error) {
 	reportedValues := []*big.Int{}
 	rawReport := strings.Split(input, "\n")
 	reportLength := len(rawReport[0])
@@ -21,11 +21,15 @@ func parseInput(input string) diagnosticReport {
 		reported := new(big.Int)
 		reported, success := reported.SetString(reportedBinary, 2)
 		if !success {
-			panic(fmt.Errorf("Converting value %s failed", reportedBinary))
+			err = fmt.Errorf("Converting value %s failed", reportedBinary)
+			break
 		}
 		reportedValues = append(reportedValues, reported)
 	}
-	return diagnosticReport{reportedValues, reportLength}
+	if err == nil {
+		parsed = diagnosticReport{reportedValues, reportLength}
+	}
+	return parsed, err
 }
 
 func (d diagnosticReport) getMostCommonBits() *big.Int {
@@ -38,12 +42,11 @@ func (d diagnosticReport) getMostCommonBits() *big.Int {
 	reportLen := uint(len(d.reportValue))
 	mostCommonBits := new(big.Int)
 	for bitIdx, oneBitCount := range oneBitCounts {
-		if oneBitCount > reportLen/2 {
+		zeroBitCount := reportLen - oneBitCount
+		if oneBitCount >= zeroBitCount {
 			mostCommonBits.SetBit(mostCommonBits, bitIdx, 1)
-		} else if oneBitCount < reportLen/2 {
+		} else if oneBitCount < zeroBitCount {
 			mostCommonBits.SetBit(mostCommonBits, bitIdx, 0)
-		} else {
-			panic(fmt.Errorf("1 and 0 bit counts are equal for bit %d", bitIdx))
 		}
 	}
 	return mostCommonBits
@@ -63,10 +66,14 @@ func gammaToEpsilon(gamma *big.Int, bitLen int) *big.Int {
 }
 
 // SolvePart1 solves part 1 and returns the power consumption.
-func SolvePart1(input string) int {
-	fullReport := parseInput(input)
-	gamma := fullReport.getMostCommonBits()
-	epsilon := gammaToEpsilon(gamma, fullReport.reportBitLen)
+func SolvePart1(input string) (int, error) {
+	fullReport, err := parseInput(input)
 	powerConsumption := new(big.Int)
-	return int(powerConsumption.Mul(gamma, epsilon).Int64())
+	var ans int
+	if err == nil {
+		gamma := fullReport.getMostCommonBits()
+		epsilon := gammaToEpsilon(gamma, fullReport.reportBitLen)
+		ans = int(powerConsumption.Mul(gamma, epsilon).Int64())
+	}
+	return ans, err
 }

@@ -11,7 +11,7 @@ type bingoBoard struct {
 	cellMarked [5][5]bool
 }
 
-func (b bingoBoard) playMove(move int) {
+func (b *bingoBoard) playMove(move int) {
 	found := false
 	for rowIdx, row := range b.cellValues {
 		var colIdx, colElem int
@@ -28,35 +28,58 @@ func (b bingoBoard) playMove(move int) {
 	}
 }
 
-func (b bingoBoard) isComplete() (isComplete bool) {
-	for rowIdx, row := range b.cellMarked {
-		isColComplete := true
-		for _, colMarked := range row {
-			if colMarked == false {
-				isColComplete = false
-				break
-			}
+func (b bingoBoard) isRowComplete(rowIdx int) bool {
+	for _, colMarked := range b.cellMarked[rowIdx] {
+		if !colMarked {
+			return false
 		}
-		if isColComplete {
+	}
+	return true
+}
+
+func (b bingoBoard) isColComplete(colIdx int) bool {
+	for _, row := range b.cellMarked {
+		if !row[colIdx] {
+			return false
+		}
+	}
+	return true
+}
+
+func (b bingoBoard) isComplete() (isComplete bool) {
+	for rowIdx := range b.cellMarked {
+		if b.isRowComplete(rowIdx) {
 			isComplete = true
 			break
 		}
 	}
-	if !isColComplete {
-		for colIdx := 0; colIdx < 5; colIdx++ {
-			isRowComplete := true
-			for _, colMarked := range b.cellMarked[:][colIdx] {
-				if colMarked == false {
-					isColComplete = false
-					break
-				}
-			}
-			if isColComplete {
+	if !isComplete {
+		for colIdx := 0; colIdx < len(b.cellMarked); colIdx++ {
+			if b.isColComplete(colIdx) {
 				isComplete = true
 				break
 			}
 		}
 	}
+	return isComplete
+}
+
+func (b bingoBoard) getScore(lastMove int) (score int, err error) {
+	if !b.isComplete() {
+		err = fmt.Errorf("Cannot compute score for incomplete board")
+	}
+	unmarkedSum := 0
+	if err == nil {
+		for rowIdx, row := range b.cellMarked {
+			for colIdx, colElem := range row {
+				if !colElem {
+					unmarkedSum += b.cellValues[rowIdx][colIdx]
+				}
+			}
+		}
+		score = unmarkedSum * lastMove
+	}
+	return score, err
 }
 
 func splitRow(input string) (rowElem []string, err error) {
@@ -118,9 +141,10 @@ func getInputLines(input string) (lines []string, err error) {
 			lines = append(lines, line)
 		}
 	}
-	if (len(inputLines)-1)%5 != 0 {
+	if (len(lines)-1)%5 != 0 {
 		err = fmt.Errorf(
-			"Day 4 solution expects 1 moves line and any number of 5 line bingo boards",
+			"Day 4 solution expects 1 moves line and any number of 5 line bingo boards; got %d lines",
+			len(inputLines),
 		)
 	}
 	return lines, err
@@ -153,6 +177,28 @@ func parseInput(input string) (moves []int, boards []bingoBoard, err error) {
 // SolvePart1 calculates the final bingo score.
 func SolvePart1(input string) (score int, err error) {
 	var boards []bingoBoard
+	var moves []int
 	moves, boards, err = parseInput(input)
+	if err == nil {
+		var winner bingoBoard
+		var validWinner bool
+		for _, move := range moves {
+			for boardIdx := range boards {
+				boards[boardIdx].playMove(move)
+				if boards[boardIdx].isComplete() {
+					winner = boards[boardIdx]
+					validWinner = true
+					break
+				}
+			}
+			if validWinner {
+				score, err = winner.getScore(move)
+				break
+			}
+		}
+		if !validWinner {
+			err = fmt.Errorf("Could not find a winning board for all moves")
+		}
+	}
 	return score, err
 }

@@ -94,11 +94,11 @@ func (f floorLines) drawLine(line linePoints) {
 	xStep := xDelta / gcd
 	yStep := yDelta / gcd
 	for currentCoord := line.start; currentCoord != line.end; {
-		f[currentCoord[1]][currentCoord[0]] += 1
+		f[currentCoord[1]][currentCoord[0]]++
 		currentCoord[0] += xStep
 		currentCoord[1] += yStep
 	}
-	f[line.end[1]][line.end[0]] += 1
+	f[line.end[1]][line.end[0]]++
 }
 
 func parseInput(input string) (parsedPoints []linePoints, err error) {

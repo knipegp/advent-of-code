@@ -12,6 +12,7 @@ import (
 	"github.com/knipegp/advent-of-code/2021/day4"
 	"github.com/knipegp/advent-of-code/2021/day5"
 	"github.com/knipegp/advent-of-code/2021/day6"
+	"github.com/knipegp/advent-of-code/2021/day7"
 )
 
 type solver func(string) (int, error)
@@ -39,6 +40,8 @@ func TestAnswers(t *testing.T) {
 		{day5.SolvePart2, data.Day5, 22213},
 		{day6.SolvePart1, data.Day6, 383160},
 		{day6.SolvePart2, data.Day6, 1721148811504},
+		{day7.SolvePart1, data.Day7, 343441},
+		{day7.SolvePart2, data.Day7, 98925151},
 	}
 	for _, expected := range expectedAnswers {
 		t.Run(getFunctionName(expected.getSolution), func(t *testing.T) {

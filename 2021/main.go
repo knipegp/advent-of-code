@@ -13,6 +13,7 @@ import (
 	"github.com/knipegp/advent-of-code/2021/day4"
 	"github.com/knipegp/advent-of-code/2021/day5"
 	"github.com/knipegp/advent-of-code/2021/day6"
+	"github.com/knipegp/advent-of-code/2021/day7"
 )
 
 func getInputFromFile(filePath string) string {
@@ -68,6 +69,9 @@ func main() {
 	case 6:
 		part1, errPart1 = day6.SolvePart1(getInputFromFile(*parsedArgs.inputPath))
 		part2, errPart2 = day6.SolvePart2(getInputFromFile(*parsedArgs.inputPath))
+	case 7:
+		part1, errPart1 = day7.SolvePart1(getInputFromFile(*parsedArgs.inputPath))
+		part2, errPart2 = day7.SolvePart2(getInputFromFile(*parsedArgs.inputPath))
 	default:
 		panic(fmt.Errorf("Passed invalid day %d", parsedArgs.day))
 	}

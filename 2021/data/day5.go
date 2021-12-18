@@ -1,7 +1,7 @@
 package data
 
 // Day5 contains vent line coordinates.
-var Day5 string = `644,38 -> 644,265
+const Day5 = `644,38 -> 644,265
 941,468 -> 941,89
 807,552 -> 618,363
 896,510 -> 896,744

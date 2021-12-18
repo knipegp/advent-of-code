@@ -1,7 +1,7 @@
 package data
 
 // Day2 contains the movement data for the day 2 challenge.
-var Day2 = `forward 2
+const Day2 = `forward 2
 down 1
 down 7
 forward 6

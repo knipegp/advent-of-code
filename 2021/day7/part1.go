@@ -1,10 +1,15 @@
 package day7
 
 import (
+	"fmt"
 	"math"
 	"sort"
 	"strconv"
 	"strings"
+)
+
+const (
+	middleDivisor = 2.0
 )
 
 func parseInput(input string) (subPositions []int, err error) {
@@ -18,6 +23,7 @@ func parseInput(input string) (subPositions []int, err error) {
 				subPositions = append(subPositions, pos)
 			}
 		} else {
+			err = fmt.Errorf("could not parse input due to error %w", err)
 			break
 		}
 	}
@@ -28,11 +34,11 @@ func median(ints []int) int {
 	sorted := make([]int, len(ints))
 	copy(sorted, ints)
 	sort.Ints(sorted)
-	medianIndex := float64(len(sorted)) / 2.0
+	medianIndex := float64(len(sorted)) / middleDivisor
 	if float64(int(medianIndex)) == medianIndex {
 		return sorted[int(medianIndex)]
 	}
-	return (sorted[int(math.Ceil(medianIndex))] + sorted[int(math.Floor(medianIndex))]) / 2
+	return (sorted[int(math.Ceil(medianIndex))] + sorted[int(math.Floor(medianIndex))]) / middleDivisor
 }
 
 // SolvePart1 calculates the minimum cost of fuel for aligning crab subs.

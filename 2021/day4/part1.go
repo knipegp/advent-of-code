@@ -6,6 +6,10 @@ import (
 	"strings"
 )
 
+const (
+	rowLen = 5
+)
+
 type bingoBoard struct {
 	cellValues [5][5]int
 	cellMarked [5][5]bool
@@ -66,7 +70,7 @@ func (b bingoBoard) isComplete() (isComplete bool) {
 
 func (b bingoBoard) getScore(lastMove int) (score int, err error) {
 	if !b.isComplete() {
-		err = fmt.Errorf("Cannot compute score for incomplete board")
+		err = fmt.Errorf("cannot compute score for incomplete board")
 	}
 	unmarkedSum := 0
 	if err == nil {
@@ -90,8 +94,8 @@ func splitRow(input string) (rowElem []string, err error) {
 			rowElem = append(rowElem, splitElem)
 		}
 	}
-	if len(rowElem) != 5 {
-		err = fmt.Errorf("Line %s could not be parsed into 5 values", input)
+	if len(rowElem) != rowLen {
+		err = fmt.Errorf("line %s could not be parsed into %d values", input, rowLen)
 	}
 	return rowElem, err
 }
@@ -105,7 +109,7 @@ func boardFromLines(rawBoard [5]string) (newBoard bingoBoard, err error) {
 				newBoard.cellValues[rowIdx][colIdx], err = strconv.Atoi(rawVal)
 				if err != nil {
 					err = fmt.Errorf(
-						"Encountered %w while parsing board %s",
+						"encountered %w while parsing board %s",
 						err,
 						rawBoard,
 					)
@@ -126,7 +130,7 @@ func movesFromString(input string) (moves []int, err error) {
 	for moveIdx, rawMove := range rawMoves {
 		moves[moveIdx], err = strconv.Atoi(rawMove)
 		if err != nil {
-			err = fmt.Errorf("Encountered %w while parsing moves %s", err, input)
+			err = fmt.Errorf("encountered %w while parsing moves %s", err, input)
 			break
 		}
 	}
@@ -143,7 +147,7 @@ func getInputLines(input string) (lines []string, err error) {
 	}
 	if (len(lines)-1)%5 != 0 {
 		err = fmt.Errorf(
-			"Day 4 solution expects 1 moves line and any number of 5 line bingo boards; got %d lines",
+			"day 4 solution expects 1 moves line and any number of 5 line bingo boards; got %d lines",
 			len(inputLines),
 		)
 	}
@@ -158,10 +162,10 @@ func parseInput(input string) (moves []int, boards []bingoBoard, err error) {
 	}
 	if err == nil {
 		boardLines := inputLines[1:]
-		boards = make([]bingoBoard, len(boardLines)/5)
+		boards = make([]bingoBoard, len(boardLines)/rowLen)
 		for boardIdx := 0; boardIdx < len(boards); boardIdx++ {
 			singleBoardLines := [5]string{}
-			startLineIdx := boardIdx * 5
+			startLineIdx := boardIdx * rowLen
 			copy(singleBoardLines[:], boardLines[startLineIdx:startLineIdx+5])
 			var parsedBoard bingoBoard
 			parsedBoard, err = boardFromLines(singleBoardLines)
@@ -197,7 +201,7 @@ func SolvePart1(input string) (score int, err error) {
 			}
 		}
 		if !validWinner {
-			err = fmt.Errorf("Could not find a winning board for all moves")
+			err = fmt.Errorf("could not find a winning board for all moves")
 		}
 	}
 	return score, err

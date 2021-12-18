@@ -25,8 +25,7 @@ type location struct {
 	vertical   int
 }
 
-func (l location) displace(d displacement) (location, error) {
-	var err error
+func (l location) displace(d displacement) location {
 	switch d.direction {
 	case forward:
 		l.horizontal += d.magnitude
@@ -34,16 +33,17 @@ func (l location) displace(d displacement) (location, error) {
 		l.vertical -= d.magnitude
 	case down:
 		l.vertical += d.magnitude
-	default:
-		err = fmt.Errorf("Received unknown direction %s", d.direction)
 	}
-	return l, err
+	return l
 }
 
 func fromString(rawDisplacement string) (displacement, error) {
 	pattern := regexp.MustCompile(`(\w+) (\d)`)
 	groups := pattern.FindStringSubmatch(rawDisplacement)
 	magnitude, err := strconv.Atoi(groups[2])
+	if err != nil {
+		err = fmt.Errorf("could not parse displacement from string due to %w", err)
+	}
 	return displacement{
 		direction: movementDirection(groups[1]),
 		magnitude: magnitude,
@@ -71,10 +71,7 @@ func SolvePart1(input string) (int, error) {
 	if err == nil {
 		currentLocation = location{0, 0}
 		for _, movement := range movements {
-			currentLocation, err = currentLocation.displace(movement)
-			if err != nil {
-				break
-			}
+			currentLocation = currentLocation.displace(movement)
 		}
 	}
 	return currentLocation.horizontal * currentLocation.vertical, err

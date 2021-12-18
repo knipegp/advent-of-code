@@ -18,8 +18,8 @@ func getMapKeys(in map[int]int) []int {
 
 func mapDaysUntilFirstSpawnToKidsBdays(daysToTrack int) map[int][]int {
 	daysToDaysToKidsSpawn := map[int][]int{}
-	for day := 1; day <= daysToTrack2; day++ {
-		kidsSpawnedDays, _ := countFishSpawned(day, daysToTrack2, respawnRateDays)
+	for day := 1; day <= daysToTrack; day++ {
+		kidsSpawnedDays := countFishSpawned(day, daysToTrack, respawnRateDays)
 		daysToDaysToKidsSpawn[day] = kidsSpawnedDays
 	}
 	return daysToDaysToKidsSpawn
@@ -27,17 +27,10 @@ func mapDaysUntilFirstSpawnToKidsBdays(daysToTrack int) map[int][]int {
 
 func initDayToFishBorn(daysToTrack int) map[int]int {
 	daysToSpawnCount := map[int]int{}
-	for day := 1; day <= daysToTrack2; day++ {
+	for day := 1; day <= daysToTrack; day++ {
 		daysToSpawnCount[day] = 0
 	}
 	return daysToSpawnCount
-}
-
-func addAll(in []int, add int) []int {
-	for idx := range in {
-		in[idx] += add
-	}
-	return in
 }
 
 // SolvePart2 models the number of fish spawned after 256 days.

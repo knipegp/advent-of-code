@@ -1,6 +1,6 @@
 package day5
 
-// SolvePart2 returns the number of overlaping lines including diagonals.
+// SolvePart2 returns the number of overlapping lines including diagonals.
 func SolvePart2(input string) (overlapCount int, err error) {
 	parsedLinePoints, err := parseInput(input)
 	if err == nil {

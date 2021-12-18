@@ -103,42 +103,43 @@ func (f floorLines) drawLine(line linePoints) {
 
 func parseInput(input string) (parsedPoints []linePoints, err error) {
 	linePattern := regexp.MustCompile(
-		"(?P<startX>\\d+),(?P<startY>\\d+) -> (?P<endX>\\d+),(?P<endY>\\d+)",
+		`(?P<startX>\d+),(?P<startY>\d+) -> (?P<endX>\d+),(?P<endY>\d+)`,
 	)
 	parsedPoints = []linePoints{}
 	for _, inputLine := range strings.Split(input, "\n") {
 		lineMatch := linePattern.FindStringSubmatch(inputLine)
 		if lineMatch == nil {
-			err = fmt.Errorf("Could not parse coordinates from line %s", inputLine)
+			err = fmt.Errorf("could not parse coordinates from line %s", inputLine)
 			break
 		}
 		newLine := linePoints{}
-		if newLine.start[0], err = strconv.Atoi(
+		var convErr error
+		if newLine.start[0], convErr = strconv.Atoi(
 			lineMatch[linePattern.SubexpIndex("startX")],
-		); err != nil {
-			panic(err)
+		); convErr != nil {
+			panic(convErr)
 		}
-		if newLine.start[1], err = strconv.Atoi(
+		if newLine.start[1], convErr = strconv.Atoi(
 			lineMatch[linePattern.SubexpIndex("startY")],
-		); err != nil {
-			panic(err)
+		); convErr != nil {
+			panic(convErr)
 		}
-		if newLine.end[0], err = strconv.Atoi(
+		if newLine.end[0], convErr = strconv.Atoi(
 			lineMatch[linePattern.SubexpIndex("endX")],
-		); err != nil {
-			panic(err)
+		); convErr != nil {
+			panic(convErr)
 		}
-		if newLine.end[1], err = strconv.Atoi(
+		if newLine.end[1], convErr = strconv.Atoi(
 			lineMatch[linePattern.SubexpIndex("endY")],
-		); err != nil {
-			panic(err)
+		); convErr != nil {
+			panic(convErr)
 		}
 		parsedPoints = append(parsedPoints, newLine)
 	}
 	return parsedPoints, err
 }
 
-//SolvePart1 returns the total number of line overlap points.
+// SolvePart1 returns the total number of line overlap points.
 func SolvePart1(input string) (overlapCount int, err error) {
 	parsedLinePoints, err := parseInput(input)
 	if err == nil {

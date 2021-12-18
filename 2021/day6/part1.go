@@ -1,11 +1,12 @@
 package day6
 
 import (
+	"fmt"
 	"strconv"
 	"strings"
 )
 
-var (
+const (
 	respawnRateDays   = 7
 	newBoardSpawnDays = 9
 	daysToTrack1      = 80
@@ -17,26 +18,17 @@ func parseInput(input string) (daysUntilSpawn []int, err error) {
 		var parsedDays int
 		parsedDays, err = strconv.Atoi(rawDays)
 		if err != nil {
-			break
+			err = fmt.Errorf("could not parse input due to error %w", err)
 		}
 		daysUntilSpawn = append(daysUntilSpawn, parsedDays)
 	}
 	return daysUntilSpawn, err
 }
 
-func countInts(vals []int, desired int) int {
-	count := 0
-	for _, val := range vals {
-		if val == desired {
-			count++
-		}
-	}
-	return count
-}
-
 func countFishSpawned(
 	daysUntilNextSpawn, daysToCount, respawnRateDays int,
-) (kidsBdays []int, daysLeftOver int) {
+	// ) (kidsBdays []int, daysLeftOver int) {
+) (kidsBdays []int) {
 	// ) (kidsBdays []int) {
 	// -1 = daysUntilNextSpawn - daysPassed
 	// day  | daysUntilNextSpawn
@@ -53,7 +45,7 @@ func countFishSpawned(
 		// 8    | 0 + new
 		// 9    | 6 + new + new
 		daysLeftToCount := daysToCount - daysPassed
-		daysLeftOver = respawnRateDays - (daysLeftToCount % respawnRateDays) - 1
+		// daysLeftOver = respawnRateDays - (daysLeftToCount % respawnRateDays) - 1
 		additionalKids := daysLeftToCount / respawnRateDays
 		for additionalKidsIdx := 0; additionalKidsIdx < additionalKids; additionalKidsIdx++ {
 			kidsBdays = append(
@@ -62,8 +54,8 @@ func countFishSpawned(
 			)
 		}
 	}
-	return kidsBdays, daysLeftOver
-	// return kidsBdays
+	// return kidsBdays, daysLeftOver
+	return kidsBdays
 }
 
 func bdaysToRespawnCountdownFrom0(bdays []int, initRespawnRate int) []int {
@@ -79,7 +71,7 @@ func SolvePart1(input string) (fishCount int, err error) {
 	fishDaysUntilSpawn, err = parseInput(input)
 	if err == nil {
 		for daysIdx := 0; daysIdx < len(fishDaysUntilSpawn); daysIdx++ {
-			kidsBdays, _ := countFishSpawned(
+			kidsBdays := countFishSpawned(
 				fishDaysUntilSpawn[daysIdx],
 				daysToTrack1,
 				respawnRateDays,

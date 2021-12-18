@@ -1,7 +1,7 @@
 package data
 
-// Day3 contains the diagnostic report data for day 3
-var Day3 = `011001101000
+// Day3 contains the diagnostic report data for day 3.
+const Day3 = `011001101000
 010101111100
 000000111101
 001001001010

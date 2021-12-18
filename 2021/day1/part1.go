@@ -1,6 +1,7 @@
 package day1
 
 import (
+	"fmt"
 	"strconv"
 	"strings"
 )
@@ -10,8 +11,10 @@ type depthVector []int
 func parseInput(input string) (depths depthVector, err error) {
 	depths = []int{}
 	for _, rawDepth := range strings.Split(input, "\n") {
-		depth, err := strconv.Atoi(rawDepth)
+		var depth int
+		depth, err = strconv.Atoi(rawDepth)
 		if err != nil {
+			err = fmt.Errorf("input parsing failed due to %w", err)
 			break
 		}
 		depths = append(depths, depth)

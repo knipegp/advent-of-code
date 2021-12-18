@@ -33,7 +33,7 @@ func SolvePart2(input string) (score int, err error) {
 			}
 		}
 		if !validLastWinner {
-			err = fmt.Errorf("Could not complete the final winning board")
+			err = fmt.Errorf("could not complete the final winning board")
 		}
 	}
 	return score, err

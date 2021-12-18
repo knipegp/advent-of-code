@@ -1,7 +1,7 @@
 package data
 
 // Day1 contains the depth data for the day 1 challenge.
-var Day1 = `173
+const Day1 = `173
 178
 179
 187

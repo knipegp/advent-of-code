@@ -1,7 +1,5 @@
 package day2
 
-import "fmt"
-
 type locationWithAim struct {
 	location
 	aim int
@@ -16,15 +14,12 @@ func (l locationWithAim) displace(d displacement) locationWithAim {
 		l.aim -= d.magnitude
 	case down:
 		l.aim += d.magnitude
-	default:
-		panic(fmt.Errorf("Received unknown direction %s", d.direction))
 	}
 	return l
 }
 
 // SolvePart2 solves part 2 and returns the product of coordinates.
 func SolvePart2(input string) (prod int, err error) {
-
 	var movements []displacement
 	movements, err = parseMovement(input)
 	if err == nil {

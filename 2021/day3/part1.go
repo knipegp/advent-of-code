@@ -6,6 +6,11 @@ import (
 	"strings"
 )
 
+const (
+	binBase = 2
+	square  = 2
+)
+
 type reportValue []*big.Int
 
 type diagnosticReport struct {
@@ -19,9 +24,9 @@ func parseInput(input string) (parsed diagnosticReport, err error) {
 	reportLength := len(rawReport[0])
 	for _, reportedBinary := range rawReport {
 		reported := new(big.Int)
-		reported, success := reported.SetString(reportedBinary, 2)
+		reported, success := reported.SetString(reportedBinary, binBase)
 		if !success {
-			err = fmt.Errorf("Converting value %s failed", reportedBinary)
+			err = fmt.Errorf("converting value %s failed", reportedBinary)
 			break
 		}
 		reportedValues = append(reportedValues, reported)
@@ -58,7 +63,7 @@ func (d diagnosticReport) getMostCommonBits() *big.Int {
 func gammaToEpsilon(gamma *big.Int, bitLen int) *big.Int {
 	notOperand := big.NewInt(1)
 	for shiftIdx := 0; shiftIdx < bitLen; shiftIdx++ {
-		notOperand.Mul(notOperand, big.NewInt(2))
+		notOperand.Mul(notOperand, big.NewInt(square))
 	}
 	notOperand.Sub(notOperand, big.NewInt(1))
 	epsilon := new(big.Int)

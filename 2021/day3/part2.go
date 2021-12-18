@@ -3,15 +3,13 @@ package day3
 import (
 	"fmt"
 	"math/big"
-	"strings"
 )
 
 func (r reportValue) copy() (reportValue, error) {
 	copied := make(reportValue, len(r))
-	copiedCount := copy(copied, r)
-	if copiedCount != len(r) {
+	if copiedCount := copy(copied, r); copiedCount != len(r) {
 		return nil, fmt.Errorf(
-			"Report slice copy failed; copied %d expected %d",
+			"report slice copy failed; copied %d expected %d",
 			copiedCount,
 			len(r),
 		)
@@ -20,8 +18,8 @@ func (r reportValue) copy() (reportValue, error) {
 }
 
 func (r reportValue) remove(index int) reportValue {
-	out := append(r[:index], r[index+1:]...)
-	return out
+	r = append(r[:index], r[index+1:]...)
+	return r
 }
 
 // filter removes elements where shouldKeep evaluates false in place.
@@ -46,15 +44,6 @@ func countElements(r reportValue, elem *big.Int) int {
 		}
 	}
 	return count
-}
-
-func (d diagnosticReport) binString() string {
-	builder := strings.Builder{}
-	for _, val := range d.reportValue {
-		format := fmt.Sprintf("%%0%db\n", d.reportBitLen)
-		builder.WriteString(fmt.Sprintf(format, val))
-	}
-	return builder.String()
 }
 
 func filterForOxygen(
@@ -100,7 +89,7 @@ func findOxygenValue(
 				) {
 				o2Level = searchReport.reportValue[0]
 			} else {
-				err = fmt.Errorf("Could not find 02 value for gamma")
+				err = fmt.Errorf("could not find 02 value for gamma")
 			}
 		}
 	}
@@ -151,7 +140,7 @@ func findScrubberRating(
 				) {
 				scrubberRating = searchReport.reportValue[0]
 			} else {
-				err = fmt.Errorf("Could not find Scrubber rating")
+				err = fmt.Errorf("could not find Scrubber rating")
 			}
 		}
 	}

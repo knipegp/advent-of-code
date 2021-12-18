@@ -4,6 +4,7 @@ import (
 	"flag"
 	"fmt"
 	"io"
+	"log"
 	"os"
 	"strings"
 
@@ -14,6 +15,16 @@ import (
 	"github.com/knipegp/advent-of-code/2021/day5"
 	"github.com/knipegp/advent-of-code/2021/day6"
 	"github.com/knipegp/advent-of-code/2021/day7"
+)
+
+const (
+	day1Num int = iota
+	day2Num
+	day3Num
+	day4Num
+	day5Num
+	day6Num
+	day7Num
 )
 
 func getInputFromFile(filePath string) string {
@@ -50,32 +61,33 @@ func main() {
 	parsedArgs := parseFlags()
 	var part1, part2 int
 	var errPart1, errPart2 error
+	logger := log.New(os.Stdout, "", log.Ldate|log.Ltime)
 	switch *parsedArgs.day {
-	case 1:
+	case day1Num:
 		part1, errPart1 = day1.SolvePart1(getInputFromFile(*parsedArgs.inputPath))
 		part2, errPart2 = day1.SolvePart2(getInputFromFile(*parsedArgs.inputPath))
-	case 2:
+	case day2Num:
 		part1, errPart1 = day2.SolvePart1(getInputFromFile(*parsedArgs.inputPath))
 		part2, errPart2 = day2.SolvePart2(getInputFromFile(*parsedArgs.inputPath))
-	case 3:
+	case day3Num:
 		part1, errPart1 = day3.SolvePart1(getInputFromFile(*parsedArgs.inputPath))
 		part2, errPart2 = day3.SolvePart2(getInputFromFile(*parsedArgs.inputPath))
-	case 4:
+	case day4Num:
 		part1, errPart1 = day4.SolvePart1(getInputFromFile(*parsedArgs.inputPath))
 		part2, errPart2 = day4.SolvePart2(getInputFromFile(*parsedArgs.inputPath))
-	case 5:
+	case day5Num:
 		part1, errPart1 = day5.SolvePart1(getInputFromFile(*parsedArgs.inputPath))
 		part2, errPart2 = day5.SolvePart2(getInputFromFile(*parsedArgs.inputPath))
-	case 6:
+	case day6Num:
 		part1, errPart1 = day6.SolvePart1(getInputFromFile(*parsedArgs.inputPath))
 		part2, errPart2 = day6.SolvePart2(getInputFromFile(*parsedArgs.inputPath))
-	case 7:
+	case day7Num:
 		part1, errPart1 = day7.SolvePart1(getInputFromFile(*parsedArgs.inputPath))
 		part2, errPart2 = day7.SolvePart2(getInputFromFile(*parsedArgs.inputPath))
 	default:
-		panic(fmt.Errorf("Passed invalid day %d", parsedArgs.day))
+		panic(fmt.Errorf("passed invalid day %d", parsedArgs.day))
 	}
-	fmt.Printf(
+	logger.Printf(
 		"Part 1: %d, Error1: %v , Part 2: %d, Error2: %v\n",
 		part1,
 		errPart1,

@@ -15,16 +15,18 @@ import (
 	"github.com/knipegp/advent-of-code/2021/day5"
 	"github.com/knipegp/advent-of-code/2021/day6"
 	"github.com/knipegp/advent-of-code/2021/day7"
+	"github.com/knipegp/advent-of-code/2021/day8"
 )
 
 const (
-	day1Num int = iota
-	day2Num
-	day3Num
-	day4Num
-	day5Num
-	day6Num
-	day7Num
+	day1Num int = 1
+	day2Num     = 2
+	day3Num     = 3
+	day4Num     = 4
+	day5Num     = 5
+	day6Num     = 6
+	day7Num     = 7
+	day8Num     = 8
 )
 
 func getInputFromFile(filePath string) string {
@@ -84,6 +86,9 @@ func main() {
 	case day7Num:
 		part1, errPart1 = day7.SolvePart1(getInputFromFile(*parsedArgs.inputPath))
 		part2, errPart2 = day7.SolvePart2(getInputFromFile(*parsedArgs.inputPath))
+	case day8Num:
+		part1, errPart1 = day8.SolvePart1(getInputFromFile(*parsedArgs.inputPath))
+		part2, errPart2 = day8.SolvePart2(getInputFromFile(*parsedArgs.inputPath))
 	default:
 		panic(fmt.Errorf("passed invalid day %d", parsedArgs.day))
 	}
